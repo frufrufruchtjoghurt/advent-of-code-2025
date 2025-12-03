@@ -37,9 +37,8 @@ impl Dial {
     }
 }
 
-fn load_dial_changes(path: &str) -> Vec<i32> {
-    let content = std::fs::read_to_string(path).expect("Failed to read file");
-    content
+fn load_dial_changes(input: &str) -> Vec<i32> {
+    input
         .lines()
         .map(|line| {
             let direction = line.chars().next().unwrap();
@@ -53,8 +52,20 @@ fn load_dial_changes(path: &str) -> Vec<i32> {
         .collect()
 }
 
-pub fn solve() {
-    let instructions = load_dial_changes("input/day1/input.txt");
+pub fn solve_part1(input: &str) -> u32 {
+    let instructions = load_dial_changes(input);
+    let mut dial = Dial::new();
+
+    let zero_count = instructions.iter().fold(0, |acc: u32, instr| {
+        dial.move_dial(*instr);
+        acc + if dial.is_zero() { 1 } else { 0 }
+    });
+
+    zero_count
+}
+
+pub fn solve_part2(input: &str) -> u32 {
+    let instructions = load_dial_changes(input);
     let mut dial = Dial::new();
 
     let (zero_count, passed_zero_count) =
@@ -64,22 +75,19 @@ pub fn solve() {
             (acc.0 + zero_hits, acc.1 + passed)
         });
 
-    println!("Final Dial Position: {}", dial.0);
-    println!("Number of times dial hit zero: {}", zero_count);
-    println!("Number of times dial passed zero: {}", passed_zero_count);
-    println!(
-        "Total zero interactions: {}",
-        zero_count + passed_zero_count
-    );
+    passed_zero_count + zero_count
 }
 
 #[cfg(test)]
 mod tests {
+    use std::fs::read_to_string;
+
     use super::*;
 
     #[test]
     fn test_load_file() {
-        let instructions = load_dial_changes("input/day1/test_input.txt");
+        let input = read_to_string("input/day1/test_input.txt").unwrap();
+        let instructions = load_dial_changes(input.as_str());
         assert_eq!(instructions.len(), 4);
         assert_eq!(instructions[0], 10);
         assert_eq!(instructions[1], -20);
@@ -89,7 +97,8 @@ mod tests {
 
     #[test]
     fn test_example() {
-        let instructions = load_dial_changes("input/day1/example.txt");
+        let input = read_to_string("input/day1/example.txt").unwrap();
+        let instructions = load_dial_changes(input.as_str());
         let mut dial = Dial::new();
 
         let (zero_count, passed_zero_count) =

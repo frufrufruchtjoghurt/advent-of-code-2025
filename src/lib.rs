@@ -1,5 +1,10 @@
+mod utils;
+use std::error::Error;
+
+pub use utils::*;
+
 mod days;
-use days::*;
+pub use days::*;
 
 use clap::{Parser, command};
 
@@ -14,10 +19,22 @@ pub struct CliArgs {
     day: u32,
 }
 
-pub fn run(args: CliArgs) {
+pub fn run(args: CliArgs) -> Result<(), Box<dyn Error>> {
+    let input = load_input(args.day)?;
+
+    println!("The solutions for day {} are:", args.day);
     match args.day {
-        1 => day01::solve(),
-        2 => day02::solve(),
+        1 => println!(
+            "Part 1: {}\nPart 2: {}",
+            day01::solve_part1(input.as_str()),
+            day01::solve_part2(input.as_str())
+        ),
+        2 => println!(
+            "Part 1: {}\nPart 2: {}",
+            day02::solve_part1(input.as_str()),
+            day02::solve_part2(input.as_str())
+        ),
         _ => println!("Solution for Day {} is not yet implemented.", args.day),
     }
+    Ok(())
 }

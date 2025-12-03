@@ -1,8 +1,7 @@
 use itertools::Itertools;
 
-fn load_ranges(filename: &str) -> Vec<(u128, u128)> {
-    let content = std::fs::read_to_string(filename).expect("Failed to read file");
-    content
+fn load_ranges(input: &str) -> Vec<(u128, u128)> {
+    input
         .split(',')
         .map(|range| {
             range
@@ -60,21 +59,26 @@ fn sum_invalid_ids_in_ranges(ranges: &Vec<(u128, u128)>, is_valid_id: fn(u128) -
     sum
 }
 
-pub fn solve() {
-    let ranges = load_ranges("input/day2/input.txt");
-    let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part1);
-    println!("Sum of invalid IDs according to part 1: {}", sum);
-    let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part2);
-    println!("Sum of invalid IDs according to part 2: {}", sum);
+pub fn solve_part1(input: &str) -> u128 {
+    let ranges = load_ranges(input);
+    sum_invalid_ids_in_ranges(&ranges, is_valid_id_part1)
+}
+
+pub fn solve_part2(input: &str) -> u128 {
+    let ranges = load_ranges(input);
+    sum_invalid_ids_in_ranges(&ranges, is_valid_id_part2)
 }
 
 #[cfg(test)]
 mod tests {
+    use std::fs::read_to_string;
+
     use super::*;
 
     #[test]
     fn test_load_ranges() {
-        let ranges = load_ranges("input/day2/example.txt");
+        let input = read_to_string("input/day2/example.txt").unwrap();
+        let ranges = load_ranges(input.as_str());
         assert_eq!(ranges.len(), 11);
     }
 
@@ -102,7 +106,8 @@ mod tests {
 
     #[test]
     fn test_example() {
-        let ranges = load_ranges("input/day2/example.txt");
+        let input = read_to_string("input/day2/example.txt").unwrap();
+        let ranges = load_ranges(input.as_str());
         let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part1);
         assert_eq!(sum, 1227775554); // result for part 1
         let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part2);
