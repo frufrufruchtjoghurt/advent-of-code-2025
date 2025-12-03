@@ -53,8 +53,8 @@ fn load_dial_changes(path: &str) -> Vec<i32> {
         .collect()
 }
 
-fn main() {
-    let instructions = load_dial_changes("input/input.txt");
+pub fn solve() {
+    let instructions = load_dial_changes("input/day1/input.txt");
     let mut dial = Dial::new();
 
     let (zero_count, passed_zero_count) =
@@ -79,7 +79,7 @@ mod tests {
 
     #[test]
     fn test_load_file() {
-        let instructions = load_dial_changes("input/test_input.txt");
+        let instructions = load_dial_changes("input/day1/test_input.txt");
         assert_eq!(instructions.len(), 4);
         assert_eq!(instructions[0], 10);
         assert_eq!(instructions[1], -20);
@@ -89,7 +89,7 @@ mod tests {
 
     #[test]
     fn test_example() {
-        let instructions = load_dial_changes("input/example.txt");
+        let instructions = load_dial_changes("input/day1/example.txt");
         let mut dial = Dial::new();
 
         let (zero_count, passed_zero_count) =

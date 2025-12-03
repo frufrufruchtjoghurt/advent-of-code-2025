@@ -60,8 +60,8 @@ fn sum_invalid_ids_in_ranges(ranges: &Vec<(u128, u128)>, is_valid_id: fn(u128) -
     sum
 }
 
-fn main() {
-    let ranges = load_ranges("input/input.txt");
+pub fn solve() {
+    let ranges = load_ranges("input/day2/input.txt");
     let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part1);
     println!("Sum of invalid IDs according to part 1: {}", sum);
     let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part2);
@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_load_ranges() {
-        let ranges = load_ranges("input/example.txt");
+        let ranges = load_ranges("input/day2/example.txt");
         assert_eq!(ranges.len(), 11);
     }
 
@@ -102,7 +102,7 @@ mod tests {
 
     #[test]
     fn test_example() {
-        let ranges = load_ranges("input/example.txt");
+        let ranges = load_ranges("input/day2/example.txt");
         let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part1);
         assert_eq!(sum, 1227775554); // result for part 1
         let sum = sum_invalid_ids_in_ranges(&ranges, is_valid_id_part2);
