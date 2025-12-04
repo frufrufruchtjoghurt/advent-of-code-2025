@@ -4,8 +4,15 @@ version = "0.1.0"
 authors = ["Markus Fruhmann"]
 edition = "2024"
 
+[profile.bench]
+debug = true
+
 [[bench]]
 name = "adventofcode2025"
+harness = false
+
+[[bench]]
+name = "day04"
 harness = false
 
 [dependencies]
