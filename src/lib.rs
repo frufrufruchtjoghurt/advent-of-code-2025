@@ -49,6 +49,11 @@ pub fn run(args: CliArgs) -> Result<(), Box<dyn Error>> {
             day05::solve_part1(input.as_str()),
             day05::solve_part2(input.as_str())
         ),
+        6 => println!(
+            "Part 1: {}\nPart 2: {}",
+            day06::solve_part1(input.as_str()),
+            day06::solve_part2(input.as_str())
+        ),
         _ => println!("Solution for Day {} is not yet implemented.", args.day),
     }
     Ok(())

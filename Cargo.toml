@@ -27,6 +27,10 @@ harness = false
 name = "day05"
 harness = false
 
+[[bench]]
+name = "day06"
+harness = false
+
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
 itertools = "0.14.0"
