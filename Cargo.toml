@@ -34,6 +34,7 @@ harness = false
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
 itertools = "0.14.0"
+transpose = "0.2.3"
 
 [dev-dependencies]
 criterion = "0.8.0"

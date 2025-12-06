@@ -8,6 +8,9 @@ fn day06_benchmark(c: &mut Criterion) {
     c.bench_function("day06part2", |b| {
         b.iter(|| adventofcode2025::day06::solve_part2(input))
     });
+    c.bench_function("day06part2transpose", |b| {
+        b.iter(|| adventofcode2025::day06::solve_part2_with_transpose(input))
+    });
 }
 
 criterion_group!(benches, day06_benchmark);

@@ -1,3 +1,6 @@
+use itertools::Itertools;
+use transpose::transpose;
+
 pub fn solve_part1(input: &str) -> usize {
     let line_count = input.lines().count();
     let ops: Vec<&str> = input.lines().last().unwrap().split_whitespace().collect();
@@ -28,6 +31,11 @@ pub fn solve_part1(input: &str) -> usize {
 }
 
 pub fn solve_part2(input: &str) -> usize {
+    let max_line_length = input
+        .lines()
+        .map(|line| line.chars().count())
+        .max()
+        .unwrap();
     let num_line_count = input.lines().count() - 1;
     let ops: Vec<(usize, char)> = input
         .lines()
@@ -42,7 +50,11 @@ pub fn solve_part2(input: &str) -> usize {
     let num_char_grid: Vec<Vec<char>> = input
         .lines()
         .take(num_line_count)
-        .map(|line| line.chars().collect())
+        .map(|line| {
+            let mut line_chars: Vec<char> = line.chars().collect();
+            line_chars.resize(max_line_length, ' ');
+            line_chars
+        })
         .collect();
 
     for i in 0..ops.len() {
@@ -51,7 +63,7 @@ pub fn solve_part2(input: &str) -> usize {
         let block_end = if i + 1 < ops.len() {
             ops[i + 1].0 - 2
         } else {
-            num_char_grid[0].len() - 1
+            max_line_length - 1
         };
         let operation = ops[i].1;
 
@@ -92,6 +104,70 @@ pub fn solve_part2(input: &str) -> usize {
     results.iter().sum()
 }
 
+pub fn solve_part2_with_transpose(input: &str) -> usize {
+    // Pad the input to a rectangular grid
+    let max_line_length = input
+        .lines()
+        .map(|line| line.chars().count())
+        .max()
+        .unwrap();
+    let chars: Vec<char> = input
+        .lines()
+        .flat_map(|line| {
+            let mut line_chars: Vec<char> = line.chars().collect();
+            line_chars.resize(max_line_length, ' ');
+            line_chars
+        })
+        .collect();
+    let mut transposed_chars = vec![' '; chars.len()];
+    let input_height = input.lines().count();
+
+    transpose(&chars, &mut transposed_chars, max_line_length, input_height);
+
+    let parts: Vec<&[char]> = transposed_chars.chunks(input_height).collect();
+
+    let mut total = 0;
+
+    let mut current_op = parts.iter().nth(0).unwrap().last().unwrap();
+
+    let mut part_result = match current_op {
+        '+' => 0,
+        '*' => 1,
+        _ => unreachable!("Only + and * operations are supported"),
+    };
+
+    for part in parts {
+        if !part.last().unwrap().is_whitespace() {
+            current_op = part.last().unwrap();
+            part_result = match current_op {
+                '+' => 0,
+                '*' => 1,
+                _ => unreachable!("Only + and * operations are supported"),
+            };
+        }
+
+        let number_str = part.iter().take(part.len() - 1).join("").trim().to_string();
+
+        if number_str.is_empty() {
+            total += part_result;
+            continue;
+        }
+
+        let number = number_str.parse::<usize>().unwrap();
+        match current_op {
+            '+' => {
+                part_result += number;
+            }
+            '*' => {
+                part_result *= number;
+            }
+            _ => unreachable!("Only + and * operations are supported"),
+        }
+    }
+
+    total + part_result
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::read_to_string;
@@ -109,6 +185,13 @@ mod tests {
     fn test_solve_part2() {
         let input = read_to_string("input/day06/example.txt").unwrap();
         let result = solve_part2(input.as_str());
+        assert_eq!(result, 3263827);
+    }
+
+    #[test]
+    fn test_solve_part2_with_transpose() {
+        let input = read_to_string("input/day06/example.txt").unwrap();
+        let result = solve_part2_with_transpose(input.as_str());
         assert_eq!(result, 3263827);
     }
 }
