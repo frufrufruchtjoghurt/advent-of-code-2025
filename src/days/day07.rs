@@ -1,8 +1,7 @@
 use std::collections::HashSet;
 
 pub fn solve_part1(input: &str) -> usize {
-    let capacity = input.find('\n').unwrap();
-    let mut beams: HashSet<usize> = HashSet::with_capacity(capacity);
+    let mut beams: HashSet<usize> = HashSet::with_capacity(1);
     let mut split_count = 0;
 
     let start_pos = input.find('S').unwrap();
@@ -38,7 +37,7 @@ pub fn solve_part1(input: &str) -> usize {
 
 pub fn solve_part2(input: &str) -> usize {
     let capacity = input.find('\n').unwrap();
-    let mut beams: HashSet<usize> = HashSet::with_capacity(capacity);
+    let mut beams: HashSet<usize> = HashSet::with_capacity(1);
     let mut path_count = vec![0; capacity];
 
     let start_pos = input.find('S').unwrap();
